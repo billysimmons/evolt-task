@@ -1,15 +1,16 @@
-require("dotenv").config();
 const express = require("express");
-const app = express();
-const emailRoutes = require("./routes/emailRoutes");
+require("dotenv").config();
 
+const emailRoutes = require("./routes/emailRoutes");
+const memberRoutes = require("./routes/memberRoutes");
+
+const app = express();
 app.use(express.json());
 
-// Use email-related routes
 app.use("/api/email", emailRoutes);
+app.use("/api/members", memberRoutes);
 
-// Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
