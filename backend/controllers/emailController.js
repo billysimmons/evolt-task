@@ -3,7 +3,8 @@
 const pool = require("../config/dbConfig");
 const mailjetService = require("../services/mailJetService.js");
 
-const sendEmail = async (req, res) => {
+// /api/email/send-email
+exports.sendEmail = async (req, res) => {
   const { to, subject, message, member_id } = req.body;
 
   if (!to || !subject || !message || !member_id) {
@@ -35,6 +36,15 @@ const sendEmail = async (req, res) => {
   }
 };
 
-module.exports = {
-  sendEmail,
+// /api/email/total-sent
+exports.getTotalEmailsSent = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT COUNT(*) AS total FROM email_statuses"
+    );
+    res.json({ totalEmailsSent: rows[0].total });
+  } catch (err) {
+    console.error("Error fetching total emails sent:", err);
+    res.status(500).json({ error: "Failed to retrieve email count" });
+  }
 };
