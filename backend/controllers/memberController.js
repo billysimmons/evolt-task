@@ -25,3 +25,16 @@ exports.getMemberScans = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch member scans" });
   }
 };
+
+// /api/members/total-scans
+exports.getTotalScans = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT COUNT(*) AS total FROM member_scans"
+    );
+    res.json({ totalScans: rows[0].total });
+  } catch (err) {
+    console.error("Error fetching total scans:", err);
+    res.status(500).json({ error: "Failed to retrieve total scans" });
+  }
+};
